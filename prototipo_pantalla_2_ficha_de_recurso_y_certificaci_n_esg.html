@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="es" dir="ltr" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ficha de Recurso & Pasaporte Digital ESG - EcoSimbiosis Hub</title>
+  
+  <!-- Accessibility & European Standards Metadata (EN 301 549 / WCAG 2.1 AA) -->
+  <meta name="description" content="Ficha técnica detallada, pasaporte digital de recurso, telemetría IoT en vivo y reserva con impacto ambiental trazable.">
+  <meta name="theme-color" content="#0d9488">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#f0fdfa',
+              100: '#ccfbf1',
+              500: '#14b8a6',
+              600: '#0d9488',
+              700: '#0f766e',
+              800: '#115e59',
+              900: '#134e4a',
+            },
+            eco: {
+              leaf: '#10b981',
+              energy: '#eab308',
+              tech: '#3b82f6',
+              purple: '#8b5cf6'
+            }
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+
+  <style>
+    /* WCAG 2.1 AA Focus Rings */
+    *:focus-visible {
+      outline: 3px solid #0d9488 !important;
+      outline-offset: 2px !important;
+    }
+
+    /* Live Telemetry Pulse */
+    @keyframes pulse-ring {
+      0% { transform: scale(0.95); opacity: 0.8; }
+      50% { transform: scale(1.3); opacity: 0; }
+      100% { transform: scale(0.95); opacity: 0; }
+    }
+    .iot-pulse::before {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background-color: currentColor;
+      border-radius: 50%;
+      animation: pulse-ring 2s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+      z-index: -1;
+    }
+
+    /* Skip link for keyboard users */
+    .skip-to-content {
+      position: absolute;
+      top: -40px;
+      left: 0;
+      background: #0d9488;
+      color: white;
+      padding: 8px 16px;
+      z-index: 9999;
+      transition: top 0.2s ease;
+    }
+    .skip-to-content:focus {
+      top: 0;
+    }
+
+    /* Scrollbar Styling */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f1f5f9;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 3px;
+    }
+  </style>
+</head>
+
+<body class="h-full bg-slate-50 text-slate-800 flex flex-col font-sans antialiased selection:bg-brand-500 selection:text-white dark:bg-slate-900 dark:text-slate-100">
+
+  <!-- Skip to Main Content (EN 301 549) -->
+  <a href="#main-content" class="skip-to-content rounded-br-lg font-medium text-sm">
+    Saltar al contenido principal (Teclado)
+  </a>
+
+  <!-- Accessibility Controls Header Bar -->
+  <div class="bg-slate-900 text-slate-300 text-xs py-1 px-4 flex justify-between items-center border-b border-slate-800">
+    <div class="flex items-center space-x-4">
+      <span class="inline-flex items-center text-teal-400 font-semibold" aria-label="Cumple Estándar Europeo EN 301 549 / WCAG 2.1 AA">
+        <i class="fa-solid fa-shield-halved mr-1" aria-hidden="true"></i> EU EN 301 549 / WCAG 2.1 AA
+      </span>
+      <span class="hidden md:inline text-slate-400">| Pasaporte Digital de Recurso v2.4</span>
+    </div>
+    <div class="flex items-center space-x-3">
+      <!-- Language Selector -->
+      <label for="lang-select" class="sr-only">Seleccionar Idioma</label>
+      <select id="lang-select" class="bg-slate-800 text-slate-200 text-xs rounded border border-slate-700 px-2 py-0.5 focus:outline-none">
+        <option value="es" selected>ES (Español)</option>
+        <option value="en">EN (English)</option>
+        <option value="fr">FR (Français)</option>
+        <option value="de">DE (Deutsch)</option>
+      </select>
+      <!-- Contrast Toggle -->
+      <button id="toggle-contrast" class="hover:text-white px-2 py-0.5 rounded bg-slate-800 border border-slate-700 flex items-center gap-1" aria-label="Cambiar modo de alto contraste">
+        <i class="fa-solid fa-circle-half-stroke" aria-hidden="true"></i>
+        <span class="hidden sm:inline">Alto Contraste</span>
+      </button>
+      <!-- Font Size Adjuster -->
+      <div class="hidden sm:flex items-center space-x-1 border-l border-slate-700 pl-2">
+        <button id="font-decrease" class="px-1.5 py-0.5 bg-slate-800 hover:bg-slate-700 rounded border border-slate-700 font-bold" aria-label="Reducir tamaño de letra">A-</button>
+        <button id="font-increase" class="px-1.5 py-0.5 bg-slate-800 hover:bg-slate-700 rounded border border-slate-700 font-bold" aria-label="Aumentar tamaño de letra">A+</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Navigation Header -->
+  <header class="bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 sticky top-0 z-30 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16 gap-4">
+        
+        <!-- Back Button & Title -->
+        <div class="flex items-center gap-3">
+          <a href="eco_mapa_prototipo.html" class="p-2 rounded-xl bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 text-slate-700 dark:text-slate-200 transition flex items-center gap-2 text-xs font-bold" aria-label="Volver al Eco-Mapa Interactivo">
+            <i class="fa-solid fa-arrow-left text-sm" aria-hidden="true"></i>
+            <span class="hidden sm:inline">Volver al Mapa</span>
+          </a>
+          <div class="h-6 w-px bg-slate-200 dark:bg-slate-700 hidden sm:block"></div>
+          <div>
+            <span class="text-xs font-bold uppercase tracking-wider text-teal-600 dark:text-teal-400">Detalle de Recurso #EU-BIO-8921</span>
+            <h1 class="text-base font-extrabold text-slate-900 dark:text-white leading-none">Cámara Climática de Ensayos Térmicos</h1>
+          </div>
+        </div>
+
+        <!-- Action Badges -->
+        <div class="flex items-center gap-2">
+          <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-800">
+            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+            IoT Conectado
+          </span>
+          <button id="share-btn" class="p-2 text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-white rounded-xl bg-slate-100 dark:bg-slate-700 transition" aria-label="Compartir Ficha">
+            <i class="fa-solid fa-share-nodes" aria-hidden="true"></i>
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Body Content -->
+  <main id="main-content" class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6" role="main">
+    
+    <!-- Top Breadcrumb & Status Bar -->
+    <nav class="flex text-xs text-slate-500 dark:text-slate-400 mb-4" aria-label="Migas de pan">
+      <ol class="inline-flex items-center space-x-1 md:space-x-2">
+        <li><a href="#" class="hover:text-teal-600">Inicio</a></li>
+        <li><i class="fa-solid fa-angle-right text-[10px]"></i></li>
+        <li><a href="#" class="hover:text-teal-600">Agritech & Bio</a></li>
+        <li><i class="fa-solid fa-angle-right text-[10px]"></i></li>
+        <li class="font-bold text-slate-800 dark:text-slate-200" aria-current="page">Cámara Climática Bio-Ensayo</li>
+      </ol>
+    </nav>
+
+    <!-- Main 2-Column Responsive Layout -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+
+      <!-- LEFT COLUMN: Technical Info, IoT Telemetry, Specs, Reviews (8 cols) -->
+      <div class="lg:col-span-8 space-y-6">
+
+        <!-- Hero Card & Visual Gallery -->
+        <div class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 overflow-hidden shadow-sm">
+          
+          <!-- Image / Visual Simulation Banner -->
+          <div class="relative h-64 sm:h-80 bg-slate-900 flex items-center justify-center overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1581093458791-9f3c3250a8b0?auto=format&fit=crop&w=1200&q=80" 
+                 alt="Fotografía de la Cámara Climática de alta precisión en laboratorio del Instituto de Investigaciones Agrarias" 
+                 class="w-full h-full object-cover opacity-80 hover:scale-105 transition duration-500"
+                 onerror="this.onerror=null; this.src='https://placehold.co/1200x600/1e293b/0d9488?text=Camara+Climatica+de+Ensayos+Bio';">
+            
+            <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent"></div>
+
+            <!-- Overlay Badges -->
+            <div class="absolute top-4 left-4 flex flex-wrap gap-2">
+              <span class="bg-amber-500 text-slate-950 font-bold text-xs px-2.5 py-1 rounded-lg flex items-center gap-1 shadow">
+                <i class="fa-solid fa-wheat-awn"></i> Clúster Agritech / Bio
+              </span>
+              <span class="bg-slate-900/80 backdrop-blur-md text-teal-300 border border-teal-500/40 font-bold text-xs px-2.5 py-1 rounded-lg flex items-center gap-1">
+                <i class="fa-solid fa-certificate"></i> Marcado CE & ISO 9001
+              </span>
+            </div>
+
+            <div class="absolute bottom-4 left-4 right-4 flex justify-between items-end">
+              <div>
+                <span class="text-teal-400 font-mono text-xs uppercase tracking-widest block font-bold">Propietario Verificado</span>
+                <h2 class="text-xl sm:text-2xl font-extrabold text-white flex items-center gap-2">
+                  Instituto de Investigaciones Agrarias
+                  <i class="fa-solid fa-circle-check text-teal-400 text-base" title="Nodo Certificado ESG"></i>
+                </h2>
+                <p class="text-xs text-slate-300"><i class="fa-solid fa-location-dot text-amber-400 mr-1"></i> Parque Científico Norte (4.8 km del centro)</p>
+              </div>
+
+              <div class="hidden sm:block text-right">
+                <span class="text-xs text-slate-300 block">Valoración de Usuarios</span>
+                <div class="flex items-center gap-1 text-amber-400 font-bold text-sm">
+                  <i class="fa-solid fa-star"></i> 5.0 <span class="text-slate-400 text-xs font-normal">(18 reservas exitosas)</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick Stats Bar -->
+          <div class="grid grid-cols-2 sm:grid-cols-4 divide-x divide-y sm:divide-y-0 divide-slate-200 dark:divide-slate-700 bg-slate-50 dark:bg-slate-800/80 border-t border-slate-200 dark:border-slate-700 text-center text-xs py-3">
+            <div class="p-2">
+              <span class="text-slate-400 block text-[10px] uppercase font-bold">Volumen Útil</span>
+              <span class="font-extrabold text-slate-900 dark:text-white text-sm">600 Litros</span>
+            </div>
+            <div class="p-2">
+              <span class="text-slate-400 block text-[10px] uppercase font-bold">Rango Térmico</span>
+              <span class="font-extrabold text-slate-900 dark:text-white text-sm">-40°C a +180°C</span>
+            </div>
+            <div class="p-2">
+              <span class="text-slate-400 block text-[10px] uppercase font-bold">Humedad Relativa</span>
+              <span class="font-extrabold text-slate-900 dark:text-white text-sm">10% a 98% RH</span>
+            </div>
+            <div class="p-2">
+              <span class="text-slate-400 block text-[10px] uppercase font-bold">Ahorro CO₂ / uso</span>
+              <span class="font-extrabold text-emerald-600 dark:text-emerald-400 text-sm">18.5 kg CO₂</span>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Live IoT Telemetry & Sensor Dashboard Widget -->
+        <div class="bg-slate-900 text-slate-100 rounded-2xl p-5 border border-slate-800 shadow-xl space-y-4 relative overflow-hidden">
+          <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+            <div class="flex items-center gap-3">
+              <div class="w-9 h-9 rounded-xl bg-teal-500/20 text-teal-400 flex items-center justify-center text-lg font-bold">
+                <i class="fa-solid fa-microchip" aria-hidden="true"></i>
+              </div>
+              <div>
+                <h3 class="font-bold text-sm text-white flex items-center gap-2">
+                  Telemetría IoT en Tiempo Real
+                  <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+                </h3>
+                <p class="text-[11px] text-slate-400 font-mono">Smart Meter ID: #IOT-MODBUS-9982 • Muestreo cada 3s</p>
+              </div>
+            </div>
+            <span class="text-xs bg-slate-800 border border-slate-700 text-teal-300 font-mono px-2.5 py-1 rounded-lg">
+              Estado: <strong class="text-emerald-400">STANDBY (DISPONIBLE)</strong>
+            </span>
+          </div>
+
+          <!-- IoT Live Meters Grid -->
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            
+            <div class="bg-slate-800/80 p-3 rounded-xl border border-slate-700/60">
+              <div class="flex justify-between items-center text-xs text-slate-400 mb-1">
+                <span>Consumo Eléctrico</span>
+                <i class="fa-solid fa-bolt text-amber-400"></i>
+              </div>
+              <div class="flex items-baseline gap-1">
+                <span class="text-xl font-extrabold font-mono text-white" id="iot-power-val">0.02</span>
+                <span class="text-xs font-mono text-slate-400">kW/h</span>
+              </div>
+              <div class="w-full bg-slate-700 h-1.5 rounded-full mt-2 overflow-hidden">
+                <div id="iot-power-bar" class="bg-amber-400 h-full w-[5%] transition-all duration-500"></div>
+              </div>
+            </div>
+
+            <div class="bg-slate-800/80 p-3 rounded-xl border border-slate-700/60">
+              <div class="flex justify-between items-center text-xs text-slate-400 mb-1">
+                <span>Temperatura Interna</span>
+                <i class="fa-solid fa-temperature-half text-teal-400"></i>
+              </div>
+              <div class="flex items-baseline gap-1">
+                <span class="text-xl font-extrabold font-mono text-white" id="iot-temp-val">21.4</span>
+                <span class="text-xs font-mono text-slate-400">°C (Ambiente)</span>
+              </div>
+              <div class="w-full bg-slate-700 h-1.5 rounded-full mt-2 overflow-hidden">
+                <div class="bg-teal-400 h-full w-[45%]"></div>
+              </div>
+            </div>
+
+            <div class="bg-slate-800/80 p-3 rounded-xl border border-slate-700/60">
+              <div class="flex justify-between items-center text-xs text-slate-400 mb-1">
+                <span>Calibración Sensor</span>
+                <i class="fa-solid fa-sliders text-emerald-400"></i>
+              </div>
+              <div class="flex items-baseline gap-1">
+                <span class="text-xl font-extrabold font-mono text-emerald-400">100%</span>
+                <span class="text-xs font-mono text-slate-400">ISO/IEC 17025</span>
+              </div>
+              <p class="text-[10px] text-slate-400 mt-1">Último ajuste: Hoy 08:30 AM</p>
+            </div>
+
+          </div>
+
+          <div class="text-[11px] text-slate-400 flex items-center justify-between pt-1 border-t border-slate-800/80">
+            <span><i class="fa-solid fa-shield text-teal-400 mr-1"></i> Trazabilidad asegurada mediante firma de sensor digital</span>
+            <span class="text-slate-500 font-mono">Protocolo MQTT / SSL</span>
+          </div>
+        </div>
+
+        <!-- Detailed Description & Capability Matrix -->
+        <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-200 dark:border-slate-700 space-y-4">
+          <h3 class="text-base font-bold text-slate-900 dark:text-white border-b border-slate-200 dark:border-slate-700 pb-2">
+            Descripción Técnica y Aplicaciones Industriales
+          </h3>
+          <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+            Esta cámara de ensayos ambientales permite simular condiciones meteorológicas extremas para la validación acelerada de vida útil de bioplásticos, empaquetados compostables, sensores Agritech y componentes electrónicos expuestos en campo. Cuenta con programador de rampa térmica/humedad automatizado y extracción de datos vía USB o telemetría en la nube.
+          </p>
+
+          <!-- Technical Specs Table -->
+          <div class="mt-4 overflow-x-auto">
+            <table class="w-full text-xs text-left text-slate-600 dark:text-slate-300 border-collapse">
+              <thead class="bg-slate-100 dark:bg-slate-700/60 text-slate-700 dark:text-slate-200 font-bold uppercase text-[10px]">
+                <tr>
+                  <th scope="col" class="py-2.5 px-3 rounded-l-lg">Especificación</th>
+                  <th scope="col" class="py-2.5 px-3">Parámetro / Detalle</th>
+                  <th scope="col" class="py-2.5 px-3 rounded-r-lg">Compatibilidad Normativa</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-200 dark:divide-slate-700 font-mono text-[11px]">
+                <tr>
+                  <td class="py-2.5 px-3 font-semibold text-slate-800 dark:text-slate-100">Modelo y Marca</td>
+                  <td class="py-2.5 px-3">Weiss Technik Event-600</td>
+                  <td class="py-2.5 px-3 text-teal-600 dark:text-teal-400">CE Industrial</td>
+                </tr>
+                <tr>
+                  <td class="py-2.5 px-3 font-semibold text-slate-800 dark:text-slate-100">Gradiente de Temperatura</td>
+                  <td class="py-2.5 px-3">3.5 °C/min (Calentamiento / Enfriamiento)</td>
+                  <td class="py-2.5 px-3 text-teal-600 dark:text-teal-400">IEC 60068-3-5</td>
+                </tr>
+                <tr>
+                  <td class="py-2.5 px-3 font-semibold text-slate-800 dark:text-slate-100">Carga Térmica Máxima</td>
+                  <td class="py-2.5 px-3">1200 W a +20°C</td>
+                  <td class="py-2.5 px-3 text-teal-600 dark:text-teal-400">ISO 16750</td>
+                </tr>
+                <tr>
+                  <td class="py-2.5 px-3 font-semibold text-slate-800 dark:text-slate-100">Materiales Permitidos</td>
+                  <td class="py-2.5 px-3">Biopolímeros, Electrónica IP67, Alimentos sellados</td>
+                  <td class="py-2.5 px-3 text-amber-600 dark:text-amber-400">Sin gases inflamables</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ESG Passport & Circular Economy Certificate Badge -->
+        <div class="bg-gradient-to-br from-teal-900 to-slate-900 text-white rounded-2xl p-6 border border-teal-700/50 shadow-lg space-y-4">
+          <div class="flex items-start justify-between">
+            <div class="flex items-center gap-3">
+              <div class="w-12 h-12 rounded-xl bg-teal-500/20 text-teal-300 border border-teal-500/40 flex items-center justify-center text-2xl">
+                <i class="fa-solid fa-leaf" aria-hidden="true"></i>
+              </div>
+              <div>
+                <span class="text-[10px] font-mono text-teal-400 uppercase tracking-widest font-bold">Pasaporte Digital de Recurso UE</span>
+                <h3 class="text-lg font-extrabold text-white">Certificado de Simbiosis e Impacto $CO_2$</h3>
+              </div>
+            </div>
+            <span class="bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 font-bold text-xs px-3 py-1 rounded-full">
+              Score Circular: 96/100
+            </span>
+          </div>
+
+          <p class="text-xs text-slate-300 leading-relaxed">
+            Al reservar este equipo ocioso en lugar de adquirir una unidad propia o trasladar muestras a laboratorios lejanos, tu organización evita la emisión de aproximadamente <strong>18.5 kg de $CO_2$ por cada 4 horas de ensayo</strong>.
+          </p>
+
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
+            <div class="bg-slate-800/80 p-3 rounded-xl border border-slate-700 text-center">
+              <i class="fa-solid fa-truck-ramp-box text-amber-400 mb-1"></i>
+              <p class="text-[10px] text-slate-400">Transporte Evitado</p>
+              <p class="text-sm font-bold text-white">240 km de flete</p>
+            </div>
+            <div class="bg-slate-800/80 p-3 rounded-xl border border-slate-700 text-center">
+              <i class="fa-solid fa-plug-circle-check text-teal-400 mb-1"></i>
+              <p class="text-[10px] text-slate-400">Energía 100% Verde</p>
+              <p class="text-sm font-bold text-white">Origen Autoconsumo Solar</p>
+            </div>
+            <div class="bg-slate-800/80 p-3 rounded-xl border border-slate-700 text-center">
+              <i class="fa-solid fa-file-contract text-emerald-400 mb-1"></i>
+              <p class="text-[10px] text-slate-400">Reporte Alcance 3</p>
+              <p class="text-sm font-bold text-white">Exportable para Memoria ESG</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Verified Reviews & Operator Community -->
+        <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-200 dark:border-slate-700 space-y-4">
+          <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-700 pb-3">
+            <h3 class="text-base font-bold text-slate-900 dark:text-white">
+              Evaluaciones de Innovadores Locales
+            </h3>
+            <span class="text-xs text-teal-600 dark:text-teal-400 font-bold">100% Verificados por IoT</span>
+          </div>
+
+          <div class="space-y-3">
+            <div class="p-3 bg-slate-50 dark:bg-slate-700/40 rounded-xl border border-slate-200 dark:border-slate-600 text-xs">
+              <div class="flex items-center justify-between mb-1">
+                <span class="font-bold text-slate-800 dark:text-slate-100">BioPack Solutions (Startup Cleantech)</span>
+                <span class="text-amber-400 font-bold"><i class="fa-solid fa-star"></i> 5.0</span>
+              </div>
+              <p class="text-slate-600 dark:text-slate-300">"Excelente calibración. Realizamos el ensayo térmico de nuestro polímero de maíz en 6 horas. El acceso con código QR fue inmediato."</p>
+              <span class="text-[10px] text-slate-400 mt-1 block">Hace 3 días • Reserva con Pasaporte ESG</span>
+            </div>
+
+            <div class="p-3 bg-slate-50 dark:bg-slate-700/40 rounded-xl border border-slate-200 dark:border-slate-600 text-xs">
+              <div class="flex items-center justify-between mb-1">
+                <span class="font-bold text-slate-800 dark:text-slate-100">AgroSensor Lab (PYME)</span>
+                <span class="text-amber-400 font-bold"><i class="fa-solid fa-star"></i> 5.0</span>
+              </div>
+              <p class="text-slate-600 dark:text-slate-300">"Técnicos del instituto muy colaboradores. Nos asistieron con la carga de perfiles térmicos en la máquina."</p>
+              <span class="text-[10px] text-slate-400 mt-1 block">Hace 2 semanas • Reserva con Pasaporte ESG</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- RIGHT COLUMN: Booking Widget & Slot Selector (4 cols) -->
+      <div class="lg:col-span-4 space-y-6">
+
+        <div class="bg-white dark:bg-slate-800 rounded-2xl p-5 border border-slate-200 dark:border-slate-700 shadow-xl sticky top-20 space-y-5">
+          
+          <!-- Pricing Header -->
+          <div class="flex items-baseline justify-between border-b border-slate-200 dark:border-slate-700 pb-3">
+            <div>
+              <span class="text-xs text-slate-500 dark:text-slate-400 block font-bold uppercase">Tarifa Uso Eficiente</span>
+              <div class="flex items-baseline gap-1">
+                <span class="text-3xl font-extrabold text-slate-900 dark:text-white">45 €</span>
+                <span class="text-xs text-slate-500 dark:text-slate-400">/ hora</span>
+              </div>
+            </div>
+            <span class="bg-teal-100 text-teal-800 dark:bg-teal-900/80 dark:text-teal-200 text-[11px] font-bold px-2.5 py-1 rounded-full">
+              PAGO POR USO
+            </span>
+          </div>
+
+          <!-- Interactive Date Picker Simulation -->
+          <div>
+            <label for="booking-date" class="block text-xs font-bold uppercase text-slate-500 dark:text-slate-400 mb-1.5">
+              1. Selecciona Fecha de Reserva
+            </label>
+            <input type="date" id="booking-date" value="2026-10-06" min="2026-10-05" 
+                   class="w-full bg-slate-50 dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-xl p-2.5 text-xs text-slate-900 dark:text-white focus:ring-2 focus:ring-teal-500">
+          </div>
+
+          <!-- IoT Available Slots Grid -->
+          <div>
+            <div class="flex justify-between items-center mb-1.5">
+              <label class="block text-xs font-bold uppercase text-slate-500 dark:text-slate-400">
+                2. Franja Horaria (Ventana IoT)
+              </label>
+              <span class="text-[10px] text-emerald-600 dark:text-emerald-400 font-bold"><i class="fa-solid fa-wifi"></i> En vivo</span>
+            </div>
+
+            <div class="grid grid-cols-2 gap-2" id="slot-container">
+              <button class="slot-btn p-2 rounded-xl border text-xs font-bold text-center transition border-teal-500 bg-teal-50 dark:bg-teal-950/80 text-teal-800 dark:text-teal-200 active-slot" data-hours="4" data-slot="09:00 - 13:00">
+                09:00 - 13:00 <br><span class="text-[10px] font-normal text-teal-600 dark:text-teal-400">(4h • Libres)</span>
+              </button>
+              <button class="slot-btn p-2 rounded-xl border text-xs font-bold text-center transition border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-700/50 text-slate-700 dark:text-slate-200 hover:border-teal-400" data-hours="3" data-slot="13:30 - 16:30">
+                13:30 - 16:30 <br><span class="text-[10px] font-normal text-slate-400">(3h • Libres)</span>
+              </button>
+              <button class="slot-btn p-2 rounded-xl border text-xs font-bold text-center transition border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-700/50 text-slate-700 dark:text-slate-200 hover:border-teal-400" data-hours="4" data-slot="17:00 - 21:00">
+                17:00 - 21:00 <br><span class="text-[10px] font-normal text-slate-400">(4h • Libres)</span>
+              </button>
+              <button class="p-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 text-slate-400 text-xs font-bold text-center cursor-not-allowed opacity-60" disabled>
+                Noche <br><span class="text-[10px] font-normal">Mantenimiento</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Summary & CO2 Estimate Box -->
+          <div class="bg-slate-50 dark:bg-slate-900/60 p-3.5 rounded-xl border border-slate-200 dark:border-slate-700 space-y-2 text-xs">
+            <div class="flex justify-between text-slate-600 dark:text-slate-300">
+              <span>Tiempo seleccionado:</span>
+              <strong id="summary-hours">4 Horas</strong>
+            </div>
+            <div class="flex justify-between text-slate-600 dark:text-slate-300">
+              <span>Coste total estimado:</span>
+              <strong id="summary-cost" class="text-slate-900 dark:text-white">180 €</strong>
+            </div>
+            <div class="flex justify-between text-emerald-600 dark:text-emerald-400 font-bold pt-1.5 border-t border-slate-200 dark:border-slate-700">
+              <span>Impacto $CO_2$ evitado:</span>
+              <strong id="summary-co2">-18.5 kg $CO_2$</strong>
+            </div>
+          </div>
+
+          <!-- Primary Call-To-Action Button -->
+          <button id="book-now-btn" class="w-full bg-teal-600 hover:bg-teal-700 text-white font-extrabold py-3 px-4 rounded-xl text-xs transition shadow-lg shadow-teal-600/25 flex items-center justify-center gap-2">
+            <i class="fa-solid fa-passport" aria-hidden="true"></i>
+            <span>Reservar con Pasaporte ESG</span>
+          </button>
+
+          <!-- Security and Guarantee Badges -->
+          <div class="space-y-1.5 pt-2 border-t border-slate-200 dark:border-slate-700 text-[10px] text-slate-500 dark:text-slate-400">
+            <div class="flex items-center gap-1.5">
+              <i class="fa-solid fa-lock text-teal-600"></i>
+              <span>Firma de contrato de uso temporal e indemnización incluida.</span>
+            </div>
+            <div class="flex items-center gap-1.5">
+              <i class="fa-solid fa-qrcode text-teal-600"></i>
+              <span>Generación de pase QR digital para acceso físico a laboratorio.</span>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- DIGITAL PASSPORT & BOOKING CONFIRMATION MODAL -->
+  <div id="passport-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div class="bg-white dark:bg-slate-800 rounded-2xl max-w-lg w-full p-6 border border-teal-500 shadow-2xl space-y-4 relative animate-fade-in">
+      
+      <button id="close-modal-btn" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 dark:hover:text-white" aria-label="Cerrar ventana">
+        <i class="fa-solid fa-xmark text-lg"></i>
+      </button>
+
+      <div class="text-center space-y-2">
+        <div class="w-12 h-12 rounded-full bg-emerald-100 text-emerald-600 dark:bg-emerald-950 dark:text-emerald-400 flex items-center justify-center text-xl mx-auto ring-4 ring-emerald-500/20">
+          <i class="fa-solid fa-circle-check"></i>
+        </div>
+        <h3 id="modal-title" class="text-lg font-extrabold text-slate-900 dark:text-white">
+          ¡Reserva Confirmada & Pasaporte Generado!
+        </h3>
+        <p class="text-xs text-slate-500 dark:text-slate-400">
+          Se ha registrado el contrato inteligente de simbiosis urbana y la asignación del equipo.
+        </p>
+      </div>
+
+      <!-- Digital Pass Card -->
+      <div class="bg-slate-900 text-slate-100 p-4 rounded-xl border border-slate-700 space-y-3 font-mono text-xs">
+        <div class="flex justify-between items-center border-b border-slate-800 pb-2">
+          <span class="text-teal-400 font-bold">PASAPORTE DIGITAL #EU-PASSPORT-2026-9921</span>
+          <span class="text-[10px] bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded">VALIDADO</span>
+        </div>
+        
+        <div class="grid grid-cols-2 gap-2 text-[11px]">
+          <div>
+            <span class="text-slate-500 block">RECURSO:</span>
+            <span class="font-bold">Cámara Climática</span>
+          </div>
+          <div>
+            <span class="text-slate-500 block">FECHA / HORA:</span>
+            <span class="font-bold" id="modal-date-slot">06 Oct • 09:00-13:00</span>
+          </div>
+          <div>
+            <span class="text-slate-500 block">UBICACIÓN:</span>
+            <span>Parque Científico Norte</span>
+          </div>
+          <div>
+            <span class="text-slate-500 block">IMPACTO CO2:</span>
+            <span class="text-emerald-400 font-bold" id="modal-co2-saved">-18.5 kg CO₂</span>
+          </div>
+        </div>
+
+        <!-- Simulated QR Code -->
+        <div class="pt-2 border-t border-slate-800 flex items-center justify-between">
+          <div>
+            <p class="text-[10px] text-slate-400">Pase de Acceso Físico:</p>
+            <p class="text-[9px] text-slate-500">Muestre en torno de entrada</p>
+          </div>
+          <div class="w-14 h-14 bg-white p-1 rounded-lg flex items-center justify-center">
+            <!-- Inline Accessible SVG representation of QR -->
+            <svg class="w-12 h-12 text-slate-900" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M2 2h8v8H2V2zm2 2v4h4V4H4zm9-2h8v8h-8V2zm2 2v4h4V4h-4zM2 13h8v8H2v-8zm2 2v4h4v-4H4zm13-2h2v2h-2v-2zm-4 0h2v2h-2v-2zm2 4h2v2h-2v-2zm2-2h2v2h-2v-2zm-2 4h2v2h-2v-2zm4 0h2v2h-2v-2zm-4-6h2v2h-2v-2z"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex gap-2">
+        <button id="download-cert-btn" class="flex-1 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 text-slate-800 dark:text-slate-200 font-bold py-2.5 px-3 rounded-xl text-xs transition text-center">
+          <i class="fa-solid fa-download mr-1"></i> Descargar Ficha ESG
+        </button>
+        <button id="close-modal-confirm" class="flex-1 bg-teal-600 hover:bg-teal-700 text-white font-bold py-2.5 px-3 rounded-xl text-xs transition text-center">
+          Entendido
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Custom Toast Box for Messages (Replacing alert()) -->
+  <div id="toast-container" class="fixed top-20 right-4 z-50 pointer-events-none space-y-2"></div>
+
+  <script>
+    // Application State
+    let selectedHours = 4;
+    let hourlyRate = 45;
+    let co2RatePerHour = 4.625; // 18.5 / 4
+
+    window.addEventListener('DOMContentLoaded', () => {
+      setupSlotSelectors();
+      setupDateListener();
+      setupModalLogic();
+      setupAccessibilityControls();
+      simulateLiveIoTTelemetry();
+    });
+
+    // Slot Picker Interaction
+    function setupSlotSelectors() {
+      const slotBtns = document.querySelectorAll('.slot-btn');
+      slotBtns.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          slotBtns.forEach(b => {
+            b.classList.remove('border-teal-500', 'bg-teal-50', 'dark:bg-teal-950/80', 'text-teal-800', 'dark:text-teal-200', 'active-slot');
+            b.classList.add('border-slate-200', 'dark:border-slate-600', 'bg-slate-50', 'dark:bg-slate-700/50', 'text-slate-700', 'dark:text-slate-200');
+          });
+
+          const target = e.currentTarget;
+          target.classList.add('border-teal-500', 'bg-teal-50', 'dark:bg-teal-950/80', 'text-teal-800', 'dark:text-teal-200', 'active-slot');
+          
+          selectedHours = parseInt(target.dataset.hours, 10);
+          updateSummary();
+        });
+      });
+    }
+
+    function setupDateListener() {
+      document.getElementById('booking-date').addEventListener('change', () => {
+        updateSummary();
+        showToast('Ventana de disponibilidad actualizada según sensor de agenda.');
+      });
+    }
+
+    function updateSummary() {
+      const totalCost = selectedHours * hourlyRate;
+      const totalCo2 = (selectedHours * co2RatePerHour).toFixed(1);
+
+      document.getElementById('summary-hours').innerText = `${selectedHours} Horas`;
+      document.getElementById('summary-cost').innerText = `${totalCost} €`;
+      document.getElementById('summary-co2').innerText = `-${totalCo2} kg CO₂`;
+    }
+
+    // Modal & Pasaporte ESG Trigger
+    function setupModalLogic() {
+      const modal = document.getElementById('passport-modal');
+      const bookBtn = document.getElementById('book-now-btn');
+      const closeBtn = document.getElementById('close-modal-btn');
+      const confirmBtn = document.getElementById('close-modal-confirm');
+      const downloadBtn = document.getElementById('download-cert-btn');
+
+      bookBtn.addEventListener('click', () => {
+        const activeSlotBtn = document.querySelector('.active-slot');
+        const slotText = activeSlotBtn ? activeSlotBtn.dataset.slot : '09:00 - 13:00';
+        const dateVal = document.getElementById('booking-date').value;
+        const totalCo2 = (selectedHours * co2RatePerHour).toFixed(1);
+
+        document.getElementById('modal-date-slot').innerText = `${dateVal} • ${slotText}`;
+        document.getElementById('modal-co2-saved').innerText = `-${totalCo2} kg CO₂`;
+
+        modal.classList.remove('hidden');
+      });
+
+      const closeModal = () => modal.classList.add('hidden');
+      closeBtn.addEventListener('click', closeModal);
+      confirmBtn.addEventListener('click', closeModal);
+
+      downloadBtn.addEventListener('click', () => {
+        showToast('Descargando Certificado ESG en formato PDF trazable...');
+      });
+    }
+
+    // Simulated IoT Power Fluctuations
+    function simulateLiveIoTTelemetry() {
+      setInterval(() => {
+        // Random standby fluctuation between 0.015 and 0.028 kW
+        const randomVal = (0.015 + Math.random() * 0.013).toFixed(3);
+        const powerElem = document.getElementById('iot-power-val');
+        const barElem = document.getElementById('iot-power-bar');
+        
+        if (powerElem && barElem) {
+          powerElem.innerText = randomVal;
+          const percentage = Math.min(100, Math.max(2, randomVal * 200));
+          barElem.style.width = `${percentage}%`;
+        }
+      }, 3000);
+    }
+
+    // Toast Notification System
+    function showToast(message) {
+      const container = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+      toast.className = 'pointer-events-auto bg-slate-900 text-white border border-teal-500 shadow-xl px-4 py-3 rounded-xl text-xs flex items-center gap-3 max-w-xs transition-all duration-300 transform translate-y-2';
+      toast.innerHTML = `
+        <i class="fa-solid fa-circle-info text-teal-400 text-base shrink-0"></i>
+        <span>${message}</span>
+      `;
+      container.appendChild(toast);
+
+      setTimeout(() => {
+        toast.classList.add('opacity-0', '-translate-y-2');
+        setTimeout(() => toast.remove(), 300);
+      }, 3500);
+    }
+
+    // High Contrast and Font Size Accessibility Controls
+    function setupAccessibilityControls() {
+      // Contrast Toggle
+      document.getElementById('toggle-contrast').addEventListener('click', () => {
+        document.documentElement.classList.toggle('dark');
+      });
+
+      // Font Resizing Logic
+      let currentFontSize = 100;
+      document.getElementById('font-increase').addEventListener('click', () => {
+        if (currentFontSize < 130) {
+          currentFontSize += 5;
+          document.documentElement.style.fontSize = `${currentFontSize}%`;
+        }
+      });
+      document.getElementById('font-decrease').addEventListener('click', () => {
+        if (currentFontSize > 90) {
+          currentFontSize -= 5;
+          document.documentElement.style.fontSize = `${currentFontSize}%`;
+        }
+      });
+
+      // Share Button Toast
+      document.getElementById('share-btn').addEventListener('click', () => {
+        showToast('Enlace de ficha técnica y Pasaporte ESG copiado al portapapeles.');
+      });
+    }
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="es" dir="ltr" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Centro de Matching e IA Predictiva - EcoSimbiosis Hub</title>
+  <meta name="description" content="Centro accesible de matching predictivo para crear alianzas cross-sectoriales y reutilizar recursos urbanos infrautilizados.">
+  <meta name="theme-color" content="#0d9488">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config={darkMode:'class',theme:{extend:{colors:{brand:{50:'#f0fdfa',100:'#ccfbf1',500:'#14b8a6',600:'#0d9488',700:'#0f766e',800:'#115e59',900:'#134e4a'}},fontFamily:{sans:['Inter','system-ui','sans-serif']}}}}
+  </script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <style>
+    *:focus-visible{outline:3px solid #0d9488!important;outline-offset:3px!important}
+    .skip-link{position:absolute;left:0;top:-60px;z-index:100;background:#0d9488;color:#fff;padding:.75rem 1rem;border-radius:0 0 .75rem 0}.skip-link:focus{top:0}
+    @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}}
+    .sr-status{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+  </style>
+</head>
+<body class="min-h-full bg-slate-50 text-slate-800 font-sans antialiased dark:bg-slate-950 dark:text-slate-100">
+<a class="skip-link" href="#main-content">Saltar al contenido principal</a>
+<div id="live-region" class="sr-status" role="status" aria-live="polite"></div>
+
+<div class="bg-slate-900 text-slate-300 text-xs px-4 py-1.5 flex flex-wrap justify-between gap-2">
+  <span class="text-teal-400 font-semibold"><i class="fa-solid fa-shield-halved mr-1" aria-hidden="true"></i> Diseño orientado a EN 301 549 y WCAG 2.2 AA</span>
+  <div class="flex items-center gap-2">
+    <label for="language" class="sr-only">Idioma</label>
+    <select id="language" class="bg-slate-800 border border-slate-600 rounded px-2 py-1"><option>ES</option><option>EN</option><option>FR</option></select>
+    <button id="contrast" class="min-h-8 px-2 rounded border border-slate-600 bg-slate-800"><i class="fa-solid fa-circle-half-stroke" aria-hidden="true"></i> <span class="hidden sm:inline">Contraste</span></button>
+    <button id="font-less" class="min-w-8 min-h-8 rounded border border-slate-600 bg-slate-800" aria-label="Reducir tamaño del texto">A-</button>
+    <button id="font-more" class="min-w-8 min-h-8 rounded border border-slate-600 bg-slate-800" aria-label="Aumentar tamaño del texto">A+</button>
+  </div>
+</div>
+
+<header class="sticky top-0 z-30 bg-white/95 dark:bg-slate-900/95 backdrop-blur border-b border-slate-200 dark:border-slate-700 shadow-sm">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-4">
+    <a href="#" class="flex items-center gap-3" aria-label="EcoSimbiosis, inicio">
+      <span class="w-10 h-10 rounded-xl bg-gradient-to-tr from-teal-700 to-emerald-400 text-white flex items-center justify-center"><i class="fa-solid fa-diagram-project" aria-hidden="true"></i></span>
+      <span><strong class="block text-slate-900 dark:text-white">EcoSimbiosis</strong><small class="block text-slate-500">Centro de Matching e IA Predictiva</small></span>
+    </a>
+    <nav class="hidden md:flex items-center gap-1 text-sm" aria-label="Navegación principal">
+      <a href="#" class="px-3 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Eco-Mapa</a>
+      <a href="#" class="px-3 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Buscador</a>
+      <a href="#main-content" aria-current="page" class="px-3 py-2 rounded-lg bg-teal-50 text-teal-800 dark:bg-teal-950 dark:text-teal-200 font-bold">Match IA</a>
+      <a href="#" class="px-3 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Impacto ESG</a>
+    </nav>
+    <button class="w-10 h-10 rounded-full bg-teal-700 text-white font-bold" aria-label="Abrir perfil de AgroSensor">AS</button>
+  </div>
+</header>
+
+<main id="main-content" class="max-w-7xl mx-auto px-4 sm:px-6 py-6">
+  <nav aria-label="Migas de pan" class="text-xs text-slate-500 mb-4"><ol class="flex gap-2"><li><a href="#" class="underline">Inicio</a></li><li aria-hidden="true">/</li><li aria-current="page" class="font-bold text-slate-700 dark:text-slate-200">Matching predictivo</li></ol></nav>
+
+  <section class="rounded-2xl bg-gradient-to-r from-slate-900 to-teal-900 text-white p-5 sm:p-7 shadow-xl mb-6" aria-labelledby="page-title">
+    <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-5">
+      <div class="max-w-2xl">
+        <span class="inline-flex items-center gap-2 text-xs font-bold text-teal-200 mb-2"><span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> MOTOR DE SIMBIOSIS ACTIVO</span>
+        <h1 id="page-title" class="text-2xl sm:text-3xl font-extrabold">Alianzas recomendadas para AgroSensor</h1>
+        <p class="text-slate-300 mt-2 text-sm">La IA relaciona necesidades, disponibilidad IoT, proximidad e impacto ESG. Revisa siempre la explicación antes de aceptar una propuesta.</p>
+      </div>
+      <div class="grid grid-cols-3 gap-2 text-center min-w-[290px]">
+        <div class="bg-white/10 rounded-xl p-3"><strong class="block text-2xl">12</strong><span class="text-xs text-slate-300">Matches</span></div>
+        <div class="bg-white/10 rounded-xl p-3"><strong class="block text-2xl text-emerald-300">74 kg</strong><span class="text-xs text-slate-300">CO₂ potencial</span></div>
+        <div class="bg-white/10 rounded-xl p-3"><strong class="block text-2xl text-amber-300">4.8 km</strong><span class="text-xs text-slate-300">Media</span></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+    <aside class="lg:col-span-3 space-y-4" aria-labelledby="filters-title">
+      <section class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-700 p-4 shadow-sm">
+        <div class="flex justify-between items-center mb-4"><h2 id="filters-title" class="font-bold"><i class="fa-solid fa-sliders text-teal-600 mr-2" aria-hidden="true"></i>Filtros</h2><button id="clear" class="text-xs underline text-teal-700 dark:text-teal-300">Restablecer</button></div>
+        <div class="space-y-4">
+          <div><label for="sector" class="block text-xs font-bold mb-1">Sector relacionado</label><select id="sector" class="w-full min-h-11 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-600 px-3"><option value="all">Todos</option><option value="agritech">Agritech</option><option value="industrial">Industrial</option><option value="cleantech">Cleantech</option><option value="bio">Bio</option></select></div>
+          <div><label for="score" class="block text-xs font-bold mb-1">Coincidencia mínima: <output id="score-value">75%</output></label><input id="score" type="range" min="60" max="95" value="75" class="w-full accent-teal-600"></div>
+          <fieldset><legend class="text-xs font-bold mb-2">Estado de propuesta</legend><label class="flex gap-2 min-h-10 items-center"><input class="status-filter accent-teal-600" type="checkbox" value="new" checked> Nuevas</label><label class="flex gap-2 min-h-10 items-center"><input class="status-filter accent-teal-600" type="checkbox" value="saved" checked> Guardadas</label></fieldset>
+          <label class="flex gap-2 items-start text-sm"><input id="iot-only" type="checkbox" checked class="mt-1 accent-teal-600"> Solo recursos verificados por telemetría IoT</label>
+        </div>
+      </section>
+      <section class="bg-teal-50 dark:bg-teal-950/40 rounded-2xl border border-teal-200 dark:border-teal-800 p-4">
+        <h2 class="font-bold text-sm"><i class="fa-solid fa-lightbulb text-amber-500 mr-2" aria-hidden="true"></i>¿Cómo decide la IA?</h2>
+        <ul class="mt-3 space-y-2 text-xs text-slate-600 dark:text-slate-300"><li>40% compatibilidad semántica</li><li>25% disponibilidad IoT</li><li>20% proximidad urbana</li><li>15% ahorro ambiental estimado</li></ul>
+        <button id="open-method" class="mt-3 text-xs font-bold underline text-teal-800 dark:text-teal-200">Ver metodología y límites</button>
+      </section>
+    </aside>
+
+    <section class="lg:col-span-6" aria-labelledby="matches-title">
+      <div class="flex flex-wrap items-center justify-between gap-3 mb-3"><h2 id="matches-title" class="text-lg font-extrabold">Propuestas priorizadas <span id="count" class="text-xs bg-teal-100 text-teal-800 rounded-full px-2 py-1">3</span></h2><select id="order" class="min-h-10 rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 px-3 text-sm" aria-label="Ordenar propuestas"><option value="score">Mayor coincidencia</option><option value="co2">Mayor ahorro de CO₂</option><option value="distance">Menor distancia</option></select></div>
+      <div id="cards" class="space-y-4"></div>
+      <div id="empty" hidden class="bg-white dark:bg-slate-900 rounded-2xl border p-8 text-center"><i class="fa-solid fa-magnifying-glass text-3xl text-slate-400" aria-hidden="true"></i><h3 class="font-bold mt-3">No hay coincidencias con estos filtros</h3><p class="text-sm text-slate-500">Reduce el porcentaje mínimo o amplía los sectores.</p></div>
+    </section>
+
+    <aside class="lg:col-span-3 space-y-4" aria-label="Crear necesidad y actividad reciente">
+      <section class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-700 p-4 shadow-sm">
+        <h2 class="font-bold"><i class="fa-solid fa-wand-magic-sparkles text-purple-500 mr-2" aria-hidden="true"></i>Describe tu necesidad</h2>
+        <p class="text-xs text-slate-500 mt-1">La IA convertirá el texto en criterios de búsqueda editables.</p>
+        <form id="need-form" class="mt-3 space-y-3">
+          <div><label for="need" class="block text-xs font-bold mb-1">Necesidad técnica</label><textarea id="need" required minlength="10" rows="4" class="w-full rounded-xl border border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-800 p-3 text-sm" placeholder="Ej.: Necesito una cámara climática para probar sensores agrícolas este fin de semana"></textarea><p id="need-error" class="hidden text-xs text-red-700 dark:text-red-300 mt-1">Describe la necesidad con al menos 10 caracteres.</p></div>
+          <label class="flex gap-2 text-xs"><input type="checkbox" required class="accent-teal-600"> Autorizo el tratamiento de estos datos para generar el matching.</label>
+          <button class="w-full min-h-11 rounded-xl bg-teal-700 hover:bg-teal-800 text-white font-bold text-sm"><i class="fa-solid fa-bolt mr-1" aria-hidden="true"></i>Generar matching</button>
+        </form>
+      </section>
+      <section class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-700 p-4">
+        <h2 class="font-bold text-sm">Actividad reciente</h2>
+        <ol class="mt-3 space-y-3 text-xs"><li class="border-l-2 border-emerald-500 pl-3"><strong>Match aceptado</strong><span class="block text-slate-500">Banco solar, hace 18 min</span></li><li class="border-l-2 border-amber-500 pl-3"><strong>Ventana IoT actualizada</strong><span class="block text-slate-500">Cámara climática, hace 1 h</span></li><li class="border-l-2 border-teal-500 pl-3"><strong>18,5 kg CO₂ estimados</strong><span class="block text-slate-500">Cálculo revisado, hoy</span></li></ol>
+      </section>
+    </aside>
+  </div>
+</main>
+
+<nav class="md:hidden sticky bottom-0 bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-700 grid grid-cols-4 z-30" aria-label="Navegación móvil">
+  <a href="#" class="min-h-14 flex flex-col items-center justify-center text-xs"><i class="fa-solid fa-map-location-dot" aria-hidden="true"></i>Mapa</a><a href="#" class="min-h-14 flex flex-col items-center justify-center text-xs"><i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>Buscar</a><a href="#main-content" aria-current="page" class="min-h-14 flex flex-col items-center justify-center text-xs text-teal-700 font-bold"><i class="fa-solid fa-bolt" aria-hidden="true"></i>Match IA</a><a href="#" class="min-h-14 flex flex-col items-center justify-center text-xs"><i class="fa-solid fa-chart-line" aria-hidden="true"></i>Impacto</a>
+</nav>
+
+<div id="modal" class="hidden fixed inset-0 z-50 bg-slate-950/75 p-4 items-center justify-center" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+  <div class="max-w-lg w-full bg-white dark:bg-slate-900 rounded-2xl p-6 border border-teal-500 shadow-2xl">
+    <div class="flex justify-between gap-3"><h2 id="modal-title" class="font-extrabold text-lg">Metodología y supervisión humana</h2><button id="close-modal" class="w-10 h-10 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800" aria-label="Cerrar diálogo"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button></div>
+    <p class="text-sm text-slate-600 dark:text-slate-300 mt-3">Las puntuaciones son orientativas. No se usan categorías sensibles ni decisiones totalmente automatizadas. El usuario puede revisar los factores, rechazar la propuesta y solicitar una revisión.</p>
+    <h3 class="font-bold text-sm mt-4">Factores del match</h3><ul class="list-disc pl-5 text-sm mt-2 space-y-1"><li>Similitud entre necesidad y capacidades declaradas.</li><li>Disponibilidad confirmada por agenda o sensor.</li><li>Distancia y emisiones de transporte evitadas.</li><li>Calidad y vigencia de los datos facilitados.</li></ul>
+    <button id="modal-ok" class="mt-5 w-full min-h-11 rounded-xl bg-teal-700 text-white font-bold">Entendido</button>
+  </div>
+</div>
+
+<script>
+const matches=[
+ {id:1,title:'Cámara climática para validación de sensores',entity:'Instituto de Investigación Agroalimentaria',sector:'agritech',score:94,co2:18.5,distance:4.8,status:'new',iot:true,icon:'fa-temperature-half',color:'amber',reason:'Compatible con ensayos de temperatura y humedad. Disponible el fin de semana y a menos de 5 km.',cross:'Agritech + Centro de I+D'},
+ {id:2,title:'Espacio de secado industrial reutilizable',entity:'Hub Industrial B',sector:'industrial',score:88,co2:26.2,distance:6.1,status:'new',iot:true,icon:'fa-industry',color:'blue',reason:'La ventana de inactividad coincide con el secado de encapsulados para sensores agrícolas.',cross:'Agritech + Manufactura'},
+ {id:3,title:'Banco de pruebas solar para telemetría remota',entity:'CleanTech Energy Lab',sector:'cleantech',score:81,co2:29.3,distance:9.2,status:'saved',iot:true,icon:'fa-solar-panel',color:'emerald',reason:'Permite validar autonomía y transmisión de datos con energía renovable en condiciones controladas.',cross:'Agritech + Cleantech'}];
+const cards=document.getElementById('cards'), live=document.getElementById('live-region');
+function colorClasses(c){return c==='amber'?'bg-amber-100 text-amber-700 dark:bg-amber-950 dark:text-amber-300':c==='blue'?'bg-blue-100 text-blue-700 dark:bg-blue-950 dark:text-blue-300':'bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300'}
+function render(){const sector=document.getElementById('sector').value,min=+document.getElementById('score').value,iot=document.getElementById('iot-only').checked,status=[...document.querySelectorAll('.status-filter:checked')].map(x=>x.value),order=document.getElementById('order').value;let data=matches.filter(m=>(sector==='all'||m.sector===sector)&&m.score>=min&&(!iot||m.iot)&&status.includes(m.status));data.sort((a,b)=>order==='co2'?b.co2-a.co2:order==='distance'?a.distance-b.distance:b.score-a.score);cards.innerHTML=data.map(m=>`<article class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-700 p-5 shadow-sm hover:shadow-md transition" data-id="${m.id}"><div class="flex gap-4"><div class="w-12 h-12 shrink-0 rounded-xl ${colorClasses(m.color)} flex items-center justify-center text-xl"><i class="fa-solid ${m.icon}" aria-hidden="true"></i></div><div class="min-w-0 flex-1"><div class="flex flex-wrap justify-between gap-2"><div><span class="text-[11px] font-bold text-teal-700 dark:text-teal-300">${m.cross}</span><h3 class="font-extrabold text-slate-900 dark:text-white">${m.title}</h3><p class="text-xs text-slate-500">${m.entity}</p></div><div class="text-right"><strong class="text-2xl text-teal-700 dark:text-teal-300">${m.score}%</strong><span class="block text-[10px] text-slate-500">coincidencia</span></div></div><p class="mt-3 text-sm text-slate-600 dark:text-slate-300"><strong>Por qué encaja:</strong> ${m.reason}</p><div class="grid grid-cols-3 gap-2 mt-4 text-center text-xs"><span class="bg-slate-50 dark:bg-slate-800 rounded-lg p-2"><b class="block">${m.distance} km</b>Distancia</span><span class="bg-emerald-50 dark:bg-emerald-950/40 rounded-lg p-2 text-emerald-800 dark:text-emerald-300"><b class="block">${m.co2} kg</b>CO₂ evitado</span><span class="bg-slate-50 dark:bg-slate-800 rounded-lg p-2"><b class="block text-emerald-700 dark:text-emerald-300">IoT verificado</b>Disponible</span></div><div class="flex flex-wrap gap-2 mt-4"><button onclick="accept(${m.id})" class="min-h-11 px-4 rounded-xl bg-teal-700 hover:bg-teal-800 text-white font-bold text-sm">Aceptar alianza</button><button onclick="save(${m.id})" class="min-h-11 px-4 rounded-xl border border-slate-300 dark:border-slate-600 font-bold text-sm">${m.status==='saved'?'Guardada':'Guardar'}</button><button onclick="explain(${m.id})" class="min-h-11 px-3 rounded-xl text-teal-800 dark:text-teal-200 underline text-sm">Ver explicación</button></div></div></div></article>`).join('');document.getElementById('count').textContent=data.length;document.getElementById('empty').hidden=data.length>0;live.textContent=`${data.length} propuestas mostradas`;}
+function toast(msg){live.textContent=msg;const t=document.createElement('div');t.className='fixed top-20 right-4 z-50 bg-slate-900 text-white border border-teal-500 rounded-xl p-4 text-sm shadow-xl';t.setAttribute('role','status');t.textContent=msg;document.body.appendChild(t);setTimeout(()=>t.remove(),3000)}
+function accept(id){const m=matches.find(x=>x.id===id);toast(`Alianza iniciada con ${m.entity}. Se ha abierto una solicitud revisable.`)}
+function save(id){const m=matches.find(x=>x.id===id);m.status='saved';render();toast('Propuesta guardada correctamente.')}
+function explain(id){openModal();document.getElementById('modal-title').textContent='Explicación del match '+matches.find(x=>x.id===id).score+'%'}
+['sector','score','iot-only','order'].forEach(id=>document.getElementById(id).addEventListener('input',()=>{document.getElementById('score-value').value=document.getElementById('score').value+'%';render()}));document.querySelectorAll('.status-filter').forEach(x=>x.addEventListener('change',render));
+document.getElementById('clear').onclick=()=>{document.getElementById('sector').value='all';document.getElementById('score').value=75;document.getElementById('score-value').value='75%';document.getElementById('iot-only').checked=true;document.querySelectorAll('.status-filter').forEach(x=>x.checked=true);render()};
+let size=100;document.getElementById('contrast').onclick=()=>document.documentElement.classList.toggle('dark');document.getElementById('font-more').onclick=()=>{size=Math.min(130,size+5);document.documentElement.style.fontSize=size+'%'};document.getElementById('font-less').onclick=()=>{size=Math.max(90,size-5);document.documentElement.style.fontSize=size+'%'};
+const modal=document.getElementById('modal'),openButton=document.getElementById('open-method');function openModal(){modal.classList.remove('hidden');modal.classList.add('flex');document.getElementById('close-modal').focus()}function closeModal(){modal.classList.add('hidden');modal.classList.remove('flex');openButton.focus()}openButton.onclick=openModal;document.getElementById('close-modal').onclick=closeModal;document.getElementById('modal-ok').onclick=closeModal;document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!modal.classList.contains('hidden'))closeModal()});
+document.getElementById('need-form').addEventListener('submit',e=>{e.preventDefault();const n=document.getElementById('need'),err=document.getElementById('need-error');if(n.value.trim().length<10){err.classList.remove('hidden');n.setAttribute('aria-invalid','true');n.focus();return}err.classList.add('hidden');n.removeAttribute('aria-invalid');toast('Necesidad procesada. Se han actualizado las recomendaciones simuladas.')});
+render();
+</script>
+</body>
+</html>

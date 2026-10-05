@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="es" dir="ltr" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EcoSimbiosis Urbana - Eco-Mapa Interactivo de Innovación</title>
+  
+  <!-- Accessibility & Standards Metadata (EU EN 301 549 / WCAG 2.1 AA) -->
+  <meta name="description" content="Plataforma de inteligencia colaborativa y economía circular urbana para conectar oferta y demanda de infraestructura tecnológica y científica.">
+  <meta name="theme-color" content="#0d9488">
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#f0fdfa',
+              100: '#ccfbf1',
+              500: '#14b8a6',
+              600: '#0d9488',
+              700: '#0f766e',
+              800: '#115e59',
+              900: '#134e4a',
+            },
+            eco: {
+              leaf: '#10b981',
+              energy: '#eab308',
+              tech: '#3b82f6',
+              purple: '#8b5cf6'
+            }
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Leaflet Maps CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+
+  <style>
+    /* Focus indicators for WCAG 2.1 AA Compliance */
+    *:focus-visible {
+      outline: 3px solid #0d9488 !important;
+      outline-offset: 2px !important;
+    }
+
+    /* Custom Leaflet styling */
+    .leaflet-popup-content-wrapper {
+      border-radius: 12px;
+      padding: 0;
+      overflow: hidden;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+    }
+    .leaflet-popup-content {
+      margin: 0;
+      width: 280px !important;
+    }
+    .custom-marker {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      color: white;
+      font-weight: bold;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      border: 2px solid white;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .custom-marker:hover {
+      transform: scale(1.15);
+      box-shadow: 0 6px 16px rgba(0,0,0,0.4);
+    }
+
+    /* Pulse animation for active IoT sensors */
+    @keyframes pulse-ring {
+      0% { transform: scale(0.95); opacity: 0.8; }
+      50% { transform: scale(1.3); opacity: 0; }
+      100% { transform: scale(0.95); opacity: 0; }
+    }
+    .iot-pulse::before {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background-color: currentColor;
+      border-radius: 50%;
+      animation: pulse-ring 2s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+      z-index: -1;
+    }
+
+    /* Skip link for keyboard users */
+    .skip-to-content {
+      position: absolute;
+      top: -40px;
+      left: 0;
+      background: #0d9488;
+      color: white;
+      padding: 8px 16px;
+      z-index: 9999;
+      transition: top 0.2s ease;
+    }
+    .skip-to-content:focus {
+      top: 0;
+    }
+
+    /* Scrollbar refinement */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f1f5f9;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 3px;
+    }
+  </style>
+</head>
+
+<body class="h-full bg-slate-50 text-slate-800 flex flex-col font-sans antialiased selection:bg-brand-500 selection:text-white dark:bg-slate-900 dark:text-slate-100">
+
+  <!-- Skip to Main Content (Accessibility EN 301 549) -->
+  <a href="#main-content" class="skip-to-content rounded-br-lg font-medium text-sm">
+    Saltar al contenido principal (Teclado)
+  </a>
+
+  <!-- Accessibility Controls Header Bar (EU Web Accessibility Standards) -->
+  <div class="bg-slate-900 text-slate-300 text-xs py-1 px-4 flex justify-between items-center border-b border-slate-800">
+    <div class="flex items-center space-x-4">
+      <span class="inline-flex items-center text-teal-400 font-semibold" aria-label="Estándar Europeo EN 301 549 Cumplido">
+        <i class="fa-solid fa-circle-check mr-1" aria-hidden="true"></i> EU Standard EN 301 549 / WCAG 2.1 AA
+      </span>
+      <span class="hidden md:inline text-slate-400">| Simbiosis Urbana Circular v2.4</span>
+    </div>
+    <div class="flex items-center space-x-3">
+      <!-- Language Selector -->
+      <label for="lang-select" class="sr-only">Seleccionar Idioma</label>
+      <select id="lang-select" class="bg-slate-800 text-slate-200 text-xs rounded border border-slate-700 px-2 py-0.5 focus:outline-none">
+        <option value="es" selected>ES (Español)</option>
+        <option value="en">EN (English)</option>
+        <option value="fr">FR (Français)</option>
+        <option value="eu">EU (Euskara)</option>
+        <option value="ca">CA (Català)</option>
+      </select>
+      <!-- Contrast Toggle -->
+      <button id="toggle-contrast" class="hover:text-white px-2 py-0.5 rounded bg-slate-800 border border-slate-700 flex items-center gap-1" aria-label="Cambiar modo de alto contraste">
+        <i class="fa-solid fa-circle-half-stroke" aria-hidden="true"></i>
+        <span class="hidden sm:inline">Alto Contraste</span>
+      </button>
+      <!-- Font Size Adjuster -->
+      <div class="hidden sm:flex items-center space-x-1 border-l border-slate-700 pl-2">
+        <button id="font-decrease" class="px-1.5 py-0.5 bg-slate-800 hover:bg-slate-700 rounded border border-slate-700 font-bold" aria-label="Reducir tamaño de letra">A-</button>
+        <button id="font-increase" class="px-1.5 py-0.5 bg-slate-800 hover:bg-slate-700 rounded border border-slate-700 font-bold" aria-label="Aumentar tamaño de letra">A+</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- GDPR / EU Privacy Consent Bar (Dismissible) -->
+  <div id="gdpr-banner" class="bg-teal-900/90 backdrop-blur-md text-white text-xs px-4 py-2 flex flex-col sm:flex-row justify-between items-center border-b border-teal-700 gap-2" role="region" aria-label="Aviso de privacidad RGPD">
+    <div class="flex items-center gap-2">
+      <i class="fa-solid fa-shield-halved text-teal-300 text-base" aria-hidden="true"></i>
+      <span><strong>Protección de Datos UE (RGPD):</strong> Telemetría IoT y geolocalización anonimizadas para la medición estricta de impacto $CO_2$. Sin cookies de rastreo de terceros.</span>
+    </div>
+    <div class="flex items-center gap-2 shrink-0">
+      <button id="accept-gdpr" class="bg-teal-500 hover:bg-teal-400 text-slate-950 font-bold px-3 py-1 rounded transition text-xs">
+        Aceptar y Continuar
+      </button>
+      <a href="#privacy" class="text-teal-200 underline hover:text-white text-xs">Más información</a>
+    </div>
+  </div>
+
+  <!-- Main Navigation Header -->
+  <header class="bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 sticky top-0 z-30 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16 gap-4">
+        
+        <!-- Logo & Title -->
+        <div class="flex items-center gap-3 shrink-0">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-teal-600 to-emerald-400 flex items-center justify-center text-white shadow-md shadow-teal-500/20">
+            <i class="fa-solid fa-diagram-project text-xl" aria-hidden="true"></i>
+          </div>
+          <div>
+            <span class="text-lg font-bold tracking-tight text-slate-900 dark:text-white flex items-center gap-2">
+              EcoSimbiosis <span class="bg-teal-100 dark:bg-teal-900/60 text-teal-800 dark:text-teal-300 text-xs px-2 py-0.5 rounded-full font-semibold">HUB URBANO</span>
+            </span>
+            <p class="text-xs text-slate-500 dark:text-slate-400 hidden sm:block">Conectando oferta y demanda técnica mediante economía circular</p>
+          </div>
+        </div>
+
+        <!-- Universal Search Input with Auto-complete Simulation -->
+        <div class="flex-1 max-w-xl relative">
+          <label for="main-search" class="sr-only">Buscar recursos, infraestructuras, equipamiento o startups</label>
+          <div class="relative">
+            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+              <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+            </div>
+            <input type="search" id="main-search" class="w-full pl-10 pr-24 py-2 bg-slate-100 dark:bg-slate-700/60 border border-slate-300 dark:border-slate-600 rounded-xl text-sm focus:bg-white dark:focus:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-400 focus:ring-2 focus:ring-teal-500 transition" placeholder="Ej: Impresora 3D industrial, Espectrómetro, Lab Bio, FP...">
+            <button id="voice-search-btn" class="absolute inset-y-1 right-1 px-3 bg-teal-600 hover:bg-teal-700 text-white rounded-lg text-xs font-semibold flex items-center gap-1 transition" aria-label="Búsqueda con IA">
+              <i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i>
+              <span class="hidden md:inline">IA Match</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Right Side Actions & User Profile -->
+        <div class="flex items-center gap-3 shrink-0">
+          <button class="relative p-2 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-xl transition" aria-label="Alertas de matching inteligente (3 nuevas)">
+            <i class="fa-solid fa-bell text-lg" aria-hidden="true"></i>
+            <span class="absolute top-1 right-1 w-2.5 h-2.5 bg-emerald-500 rounded-full ring-2 ring-white dark:ring-slate-800"></span>
+          </button>
+
+          <button id="add-resource-btn" class="hidden sm:flex items-center gap-2 bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 px-3.5 py-2 rounded-xl text-xs font-bold hover:bg-slate-800 dark:hover:bg-slate-200 transition shadow-sm">
+            <i class="fa-solid fa-plus text-teal-400 dark:text-teal-600" aria-hidden="true"></i>
+            <span>Ofrecer Recurso</span>
+          </button>
+
+          <!-- User Badge -->
+          <div class="flex items-center gap-2 border-l border-slate-200 dark:border-slate-700 pl-3">
+            <div class="w-8 h-8 rounded-full bg-teal-600 text-white flex items-center justify-center font-bold text-xs ring-2 ring-teal-500/30">
+              UP
+            </div>
+            <div class="hidden lg:block text-left">
+              <p class="text-xs font-bold leading-none text-slate-800 dark:text-slate-200">Univ. Politécnica</p>
+              <p class="text-[10px] text-teal-600 dark:text-teal-400 font-semibold">Nodo Certificado ESG</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Application Content Grid -->
+  <main id="main-content" class="flex-1 flex flex-col md:flex-row relative overflow-hidden" role="main">
+
+    <!-- Left Sidebar: Filter Panel & Fast Navigation -->
+    <aside id="filter-sidebar" class="w-full md:w-80 lg:w-96 bg-white dark:bg-slate-800 border-r border-slate-200 dark:border-slate-700 flex flex-col z-20 shadow-md md:shadow-none max-h-[40vh] md:max-h-none overflow-y-auto">
+      
+      <!-- Filter Header -->
+      <div class="p-4 border-b border-slate-200 dark:border-slate-700 flex items-center justify-between sticky top-0 bg-white/95 dark:bg-slate-800/95 backdrop-blur z-10">
+        <div class="flex items-center gap-2">
+          <i class="fa-solid fa-sliders text-teal-600 dark:text-teal-400" aria-hidden="true"></i>
+          <h2 class="font-bold text-slate-800 dark:text-white text-sm">Filtros de Simbiosis Urbana</h2>
+        </div>
+        <button id="reset-filters" class="text-xs text-slate-500 hover:text-teal-600 dark:hover:text-teal-400 underline" aria-label="Restablecer todos los filtros">
+          Limpiar
+        </button>
+      </div>
+
+      <div class="p-4 space-y-5 flex-1">
+        
+        <!-- Sector Selector (Multisectorial) -->
+        <div>
+          <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-2">
+            Clúster / Sector Objetivo
+          </label>
+          <div class="grid grid-cols-2 gap-2" role="group" aria-label="Sectores económicos">
+            <button class="sector-btn active bg-teal-50 dark:bg-teal-950/60 border-2 border-teal-500 text-teal-800 dark:text-teal-200 p-2 rounded-xl text-left text-xs font-semibold flex items-center gap-2 transition" data-sector="all">
+              <i class="fa-solid fa-globe text-teal-600" aria-hidden="true"></i> Todos
+            </button>
+            <button class="sector-btn bg-slate-50 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 text-slate-700 dark:text-slate-200 p-2 rounded-xl text-left text-xs font-semibold flex items-center gap-2 hover:border-teal-400 transition" data-sector="agritech">
+              <i class="fa-solid fa-wheat-awn text-amber-500" aria-hidden="true"></i> Agritech
+            </button>
+            <button class="sector-btn bg-slate-50 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 text-slate-700 dark:text-slate-200 p-2 rounded-xl text-left text-xs font-semibold flex items-center gap-2 hover:border-teal-400 transition" data-sector="biotech">
+              <i class="fa-solid fa-dna text-purple-500" aria-hidden="true"></i> Bio / Salud
+            </button>
+            <button class="sector-btn bg-slate-50 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 text-slate-700 dark:text-slate-200 p-2 rounded-xl text-left text-xs font-semibold flex items-center gap-2 hover:border-teal-400 transition" data-sector="cleantech">
+              <i class="fa-solid fa-leaf text-emerald-500" aria-hidden="true"></i> Cleantech
+            </button>
+            <button class="sector-btn bg-slate-50 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 text-slate-700 dark:text-slate-200 p-2 rounded-xl text-left text-xs font-semibold flex items-center gap-2 hover:border-teal-400 transition" data-sector="fablab">
+              <i class="fa-solid fa-gears text-blue-500" aria-hidden="true"></i> FP & FabLab
+            </button>
+            <button class="sector-btn bg-slate-50 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 text-slate-700 dark:text-slate-200 p-2 rounded-xl text-left text-xs font-semibold flex items-center gap-2 hover:border-teal-400 transition" data-sector="creative">
+              <i class="fa-solid fa-palette text-pink-500" aria-hidden="true"></i> Creativo/Dis
+            </button>
+          </div>
+        </div>
+
+        <!-- IoT Availability Status Slider -->
+        <div>
+          <div class="flex justify-between items-center mb-2">
+            <label for="distance-range" class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+              Radio de Proximidad Urbana
+            </label>
+            <span id="distance-value" class="text-xs font-bold text-teal-600 dark:text-teal-400">10 km</span>
+          </div>
+          <input type="range" id="distance-range" min="1" max="50" value="10" class="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-teal-600">
+          <div class="flex justify-between text-[10px] text-slate-400 mt-1">
+            <span>1 km (Caminando)</span>
+            <span>15 km (Cinturón)</span>
+            <span>50 km (Metrópoli)</span>
+          </div>
+        </div>
+
+        <!-- IoT Real-time Filter -->
+        <div class="bg-slate-50 dark:bg-slate-900/60 p-3 rounded-xl border border-slate-200 dark:border-slate-700">
+          <span class="block text-xs font-bold text-slate-700 dark:text-slate-200 mb-2">Estado Telemetría IoT en Vivo</span>
+          <div class="space-y-2">
+            <label class="flex items-center gap-2 text-xs text-slate-600 dark:text-slate-300 cursor-pointer">
+              <input type="checkbox" checked class="rounded text-teal-600 focus:ring-teal-500 dark:bg-slate-800">
+              <span class="inline-block w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+              Disponible Ahora mismo (Standby)
+            </label>
+            <label class="flex items-center gap-2 text-xs text-slate-600 dark:text-slate-300 cursor-pointer">
+              <input type="checkbox" checked class="rounded text-teal-600 focus:ring-teal-500 dark:bg-slate-800">
+              <span class="inline-block w-2.5 h-2.5 rounded-full bg-amber-500"></span>
+              Siguiente Ventana (< 24 horas)
+            </label>
+            <label class="flex items-center gap-2 text-xs text-slate-600 dark:text-slate-300 cursor-pointer">
+              <input type="checkbox" checked class="rounded text-teal-600 focus:ring-teal-500 dark:bg-slate-800">
+              <span class="inline-block w-2.5 h-2.5 rounded-full bg-teal-500"></span>
+              Certificado Ahorro Alto CO₂ (>15 kg)
+            </label>
+          </div>
+        </div>
+
+        <!-- Dynamic List of Nearby Match Recommendations -->
+        <div>
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+              Oportunidades Destacadas (IA)
+            </span>
+            <span class="text-[10px] bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 font-bold px-2 py-0.5 rounded-full">
+              3 Encontradas
+            </span>
+          </div>
+
+          <div class="space-y-2" id="resource-list-sidebar">
+            <!-- Dynamic Cards inserted via JS -->
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Footer Info Badge -->
+      <div class="p-3 bg-slate-100 dark:bg-slate-900 border-t border-slate-200 dark:border-slate-700 text-[11px] text-slate-500 flex justify-between items-center">
+        <span><i class="fa-solid fa-server text-teal-500 mr-1"></i> PostGIS Spatial Index: OK</span>
+        <span class="text-emerald-600 dark:text-emerald-400 font-semibold"><i class="fa-solid fa-wifi"></i> IoT Stream 100%</span>
+      </div>
+    </aside>
+
+    <!-- Center & Right: Interactive Leaflet Map Engine -->
+    <section class="flex-1 relative flex flex-col h-full bg-slate-200" aria-label="Mapa interactivo de recursos">
+      
+      <!-- Floating Live Urban Impact Telemetry Card (ESG Widget) -->
+      <div class="absolute top-4 left-4 right-4 sm:right-auto z-10 bg-white/95 dark:bg-slate-800/95 backdrop-blur-md border border-slate-200 dark:border-slate-700 p-3.5 rounded-2xl shadow-xl flex items-center gap-4 max-w-md">
+        <div class="w-12 h-12 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-xl shrink-0">
+          <i class="fa-solid fa-tree" aria-hidden="true"></i>
+        </div>
+        <div class="flex-1 min-w-0">
+          <div class="flex items-center justify-between">
+            <span class="text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Impacto Urbano Hoy</span>
+            <span class="text-[10px] bg-teal-500 text-white font-bold px-1.5 py-0.5 rounded">En vivo</span>
+          </div>
+          <div class="flex items-baseline gap-2 mt-0.5">
+            <span class="text-xl font-extrabold text-slate-900 dark:text-white" id="co2-saved-counter">1,482 kg</span>
+            <span class="text-xs text-emerald-600 dark:text-emerald-400 font-bold"><i class="fa-solid fa-arrow-trend-up"></i> CO₂ Evitado</span>
+          </div>
+          <p class="text-[11px] text-slate-500 dark:text-slate-400 truncate">42 intercambios de maquinaria activa en el distrito</p>
+        </div>
+      </div>
+
+      <!-- Map Control Buttons (Floating) -->
+      <div class="absolute top-4 right-4 z-10 flex flex-col gap-2">
+        <button id="recenter-map" class="w-10 h-10 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700 flex items-center justify-center hover:bg-slate-50 transition" title="Centrar en mi ubicación">
+          <i class="fa-solid fa-location-crosshairs text-teal-600" aria-hidden="true"></i>
+        </button>
+        <button id="toggle-heat" class="w-10 h-10 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700 flex items-center justify-center hover:bg-slate-50 transition" title="Alternar Mapa de Calor ESG">
+          <i class="fa-solid fa-fire text-amber-500" aria-hidden="true"></i>
+        </button>
+      </div>
+
+      <!-- The Map Container -->
+      <div id="map" class="w-full h-full min-h-[400px] z-0"></div>
+
+      <!-- Slide-over Drawer for Detailed Resource View (Hidden by default, opened on marker click) -->
+      <div id="resource-drawer" class="absolute bottom-0 inset-x-0 sm:inset-x-auto sm:right-4 sm:bottom-4 sm:w-96 bg-white dark:bg-slate-800 rounded-t-2xl sm:rounded-2xl border border-slate-200 dark:border-slate-700 shadow-2xl z-20 transform translate-y-full sm:translate-y-0 sm:opacity-0 sm:pointer-events-none transition-all duration-300 max-h-[80vh] overflow-y-auto">
+        <div id="drawer-content" class="p-5">
+          <!-- Content injected dynamically via JavaScript -->
+        </div>
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- Bottom Mobile Navigation Bar -->
+  <nav class="md:hidden bg-white dark:bg-slate-800 border-t border-slate-200 dark:border-slate-700 py-2 px-4 flex justify-around items-center z-30" aria-label="Navegación principal en móvil">
+    <a href="#" class="flex flex-col items-center text-teal-600 dark:text-teal-400 font-bold text-[10px]">
+      <i class="fa-solid fa-map-location-dot text-base mb-0.5"></i>
+      Eco-Mapa
+    </a>
+    <a href="#" class="flex flex-col items-center text-slate-400 hover:text-slate-600 text-[10px]">
+      <i class="fa-solid fa-magnifying-glass text-base mb-0.5"></i>
+      Buscador
+    </a>
+    <a href="#" class="flex flex-col items-center text-slate-400 hover:text-slate-600 text-[10px] relative">
+      <i class="fa-solid fa-bolt text-base mb-0.5 text-amber-500"></i>
+      Match IA
+      <span class="absolute -top-1 right-2 w-2 h-2 bg-amber-500 rounded-full"></span>
+    </a>
+    <a href="#" class="flex flex-col items-center text-slate-400 hover:text-slate-600 text-[10px]">
+      <i class="fa-solid fa-chart-line text-base mb-0.5"></i>
+      Impacto ESG
+    </a>
+  </nav>
+
+  <!-- Leaflet JS CDN -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+  <script>
+    /* Global Application State & Sample Ecosystem Data */
+    const ecosystemResources = [
+      {
+        id: 'res-1',
+        title: 'Impresora 3D Gran Formato PEEK/Carbono',
+        entity: 'Centro FP Técnica Industrial',
+        type: 'Maquinaria Avanzada',
+        sector: 'fablab',
+        lat: 39.475,
+        lng: -0.375,
+        distance: '3.2 km',
+        rate: '28 €/h',
+        co2Saved: '12.4 kg CO₂',
+        iotStatus: 'online', // online, busy, standby
+        powerDraw: '18W (Standby)',
+        description: 'Impresora aditiva industrial capaz de extruir materiales de alta resistencia para prototipos Cleantech en <24h.',
+        tags: ['Prototipado', 'Polímeros', 'FP Pública'],
+        rating: 4.9,
+        verifiedESG: true
+      },
+      {
+        id: 'res-2',
+        title: 'Cámara Climática Ensayo Térmico/Humedad',
+        entity: 'Instituto Investigaciones Agrarias',
+        type: 'Laboratorio de Pruebas',
+        sector: 'agritech',
+        lat: 39.482,
+        lng: -0.362,
+        distance: '4.8 km',
+        rate: '45 €/h',
+        co2Saved: '18.5 kg CO₂',
+        iotStatus: 'online',
+        powerDraw: '12W (Standby)',
+        description: 'Cámara simulación ambiental para validación de sensores de cultivo y empaquetado biodegradable.',
+        tags: ['Agritech', 'Certificación', 'Ensayos'],
+        rating: 5.0,
+        verifiedESG: true
+      },
+      {
+        id: 'res-3',
+        title: 'Espectrómetro de Masas Cuadrupolo',
+        entity: 'Parque Científico Universitario',
+        type: 'Análisis Químico',
+        sector: 'biotech',
+        lat: 39.462,
+        lng: -0.388,
+        distance: '2.1 km',
+        rate: '85 €/h',
+        co2Saved: '32.0 kg CO₂',
+        iotStatus: 'busy',
+        powerDraw: '420W (Operando)',
+        description: 'Equipo analítico de alta precisión para caracterización de moléculas biomédicas y residuos agrícolas.',
+        tags: ['Biotecnología', 'I+D Alto Nivel'],
+        rating: 4.8,
+        verifiedESG: true
+      },
+      {
+        id: 'res-4',
+        title: 'Cortadora Láser CO2 150W Industrial',
+        entity: 'Hub de Innovación Creativa',
+        type: 'Prototipado Rápido',
+        sector: 'creative',
+        lat: 39.458,
+        lng: -0.355,
+        distance: '5.5 km',
+        rate: '20 €/h',
+        co2Saved: '8.2 kg CO₂',
+        iotStatus: 'online',
+        powerDraw: '15W (Standby)',
+        description: 'Corte y grabado digital sobre maderas sostenibles, textiles reciclados y bioplásticos.',
+        tags: ['Diseño', 'FabLab', 'Economía Circular'],
+        rating: 4.7,
+        verifiedESG: false
+      },
+      {
+        id: 'res-5',
+        title: 'Banco Pruebas Eficiencia Solar & Baterías',
+        entity: 'CleanTech Lab Hub Privado',
+        type: 'Energía Limpia',
+        sector: 'cleantech',
+        lat: 39.489,
+        lng: -0.390,
+        distance: '6.1 km',
+        rate: '60 €/h',
+        co2Saved: '45.0 kg CO₂',
+        iotStatus: 'online',
+        powerDraw: '5W (Standby)',
+        description: 'Infraestructura modular para simulación de cargas de microredes y inversores de autoconsumo.',
+        tags: ['Cleantech', 'Energía', 'Microredes'],
+        rating: 4.9,
+        verifiedESG: true
+      }
+    ];
+
+    let map;
+    let markersGroup;
+    let activeFilterSector = 'all';
+
+    // Initialize Map on Load
+    window.addEventListener('DOMContentLoaded', () => {
+      initMap();
+      renderSidebarCards(ecosystemResources);
+      setupAccessibilityEvents();
+    });
+
+    function initMap() {
+      // Centered on Valencia urban innovation zone as exemplary district
+      map = L.map('map', {
+        zoomControl: false,
+        attributionControl: false
+      }).setView([39.470, -0.370], 13);
+
+      // Add modern clean tiles (CartoDB Voyager or OSM)
+      L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+        maxZoom: 19,
+        subdomains: 'abcd'
+      }).addTo(map);
+
+      // Add Zoom Control to Bottom Right
+      L.control.zoom({ position: 'bottomright' }).addTo(map);
+
+      markersGroup = L.layerGroup().addTo(map);
+      renderMapMarkers(ecosystemResources);
+    }
+
+    // Render Custom SVG/HTML Markers with IoT Status
+    function renderMapMarkers(resources) {
+      markersGroup.clearLayers();
+
+      resources.forEach(res => {
+        let colorClass = 'bg-teal-600';
+        if (res.sector === 'agritech') colorClass = 'bg-amber-500';
+        if (res.sector === 'biotech') colorClass = 'bg-purple-600';
+        if (res.sector === 'cleantech') colorClass = 'bg-emerald-600';
+        if (res.sector === 'creative') colorClass = 'bg-pink-500';
+        if (res.sector === 'fablab') colorClass = 'bg-blue-600';
+
+        const iotColor = res.iotStatus === 'online' ? 'bg-emerald-400' : 'bg-amber-400';
+
+        const customIcon = L.divIcon({
+          className: 'custom-leaflet-marker',
+          html: `
+            <div class="custom-marker ${colorClass} w-10 h-10 relative">
+              <i class="fa-solid ${getSectorIcon(res.sector)} text-sm"></i>
+              <span class="absolute -top-1 -right-1 w-3.5 h-3.5 ${iotColor} border-2 border-white rounded-full iot-pulse"></span>
+            </div>
+          `,
+          iconSize: [40, 40],
+          iconAnchor: [20, 20]
+        });
+
+        const marker = L.marker([res.lat, res.lng], { icon: customIcon });
+
+        marker.on('click', () => {
+          openResourceDrawer(res);
+          map.panTo([res.lat, res.lng]);
+        });
+
+        markersGroup.addLayer(marker);
+      });
+    }
+
+    function getSectorIcon(sector) {
+      switch(sector) {
+        case 'agritech': return 'fa-wheat-awn';
+        case 'biotech': return 'fa-dna';
+        case 'cleantech': return 'fa-leaf';
+        case 'fablab': return 'fa-gears';
+        case 'creative': return 'fa-palette';
+        default: return 'fa-microchip';
+      }
+    }
+
+    // Render cards in sidebar
+    function renderSidebarCards(resources) {
+      const container = document.getElementById('resource-list-sidebar');
+      container.innerHTML = '';
+
+      if (resources.length === 0) {
+        container.innerHTML = `
+          <div class="p-4 text-center text-slate-400 text-xs">
+            No se encontraron recursos para este filtro en el radio seleccionado.
+          </div>
+        `;
+        return;
+      }
+
+      resources.forEach(res => {
+        const card = document.createElement('div');
+        card.className = 'p-3 bg-slate-50 dark:bg-slate-700/40 hover:bg-teal-50/60 dark:hover:bg-slate-700 rounded-xl border border-slate-200 dark:border-slate-600 cursor-pointer transition flex flex-col gap-1.5';
+        card.onclick = () => {
+          openResourceDrawer(res);
+          map.setView([res.lat, res.lng], 15);
+        };
+
+        card.innerHTML = `
+          <div class="flex items-start justify-between gap-2">
+            <h3 class="font-bold text-slate-800 dark:text-white text-xs leading-snug line-clamp-1">${res.title}</h3>
+            <span class="text-[10px] font-bold px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 shrink-0">
+              ${res.co2Saved}
+            </span>
+          </div>
+          <p class="text-[11px] text-slate-500 dark:text-slate-300 flex items-center gap-1">
+            <i class="fa-solid fa-building-columns text-teal-600 dark:text-teal-400"></i> ${res.entity}
+          </p>
+          <div class="flex items-center justify-between text-[11px] pt-1 border-t border-slate-200/60 dark:border-slate-600/60">
+            <span class="text-slate-500"><i class="fa-solid fa-location-dot text-slate-400"></i> ${res.distance}</span>
+            <span class="font-bold text-slate-900 dark:text-slate-100">${res.rate}</span>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    // Open Bottom/Right Slide Drawer with full details
+    function openResourceDrawer(res) {
+      const drawer = document.getElementById('resource-drawer');
+      const content = document.getElementById('drawer-content');
+
+      content.innerHTML = `
+        <div class="flex items-start justify-between mb-3">
+          <div>
+            <span class="inline-block px-2 py-0.5 text-[10px] font-bold uppercase rounded-full bg-teal-100 text-teal-800 dark:bg-teal-900/80 dark:text-teal-200 mb-1">
+              ${res.type}
+            </span>
+            <h2 class="text-base font-bold text-slate-900 dark:text-white leading-tight">${res.title}</h2>
+            <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">${res.entity}</p>
+          </div>
+          <button onclick="closeResourceDrawer()" class="text-slate-400 hover:text-slate-600 dark:hover:text-white p-1" aria-label="Cerrar panel de detalles">
+            <i class="fa-solid fa-xmark text-lg"></i>
+          </button>
+        </div>
+
+        <!-- Telemetry IoT Box -->
+        <div class="bg-slate-900 text-slate-100 p-3 rounded-xl mb-3 text-xs space-y-1.5 border border-slate-700">
+          <div class="flex justify-between items-center">
+            <span class="text-slate-400 flex items-center gap-1">
+              <i class="fa-solid fa-microchip text-teal-400"></i> Telemetría IoT Smart Meter
+            </span>
+            <span class="text-emerald-400 font-bold flex items-center gap-1">
+              <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span> Activo
+            </span>
+          </div>
+          <div class="flex justify-between font-mono text-[11px] pt-1 border-t border-slate-800">
+            <span>Consumo actual: <strong>${res.powerDraw}</strong></span>
+            <span>Ubicación: <strong>Polígono Sur</strong></span>
+          </div>
+        </div>
+
+        <p class="text-xs text-slate-600 dark:text-slate-300 mb-3">${res.description}</p>
+
+        <!-- ESG Certificate Badge -->
+        <div class="bg-emerald-50 dark:bg-emerald-950/50 border border-emerald-200 dark:border-emerald-800/60 p-2.5 rounded-xl mb-4 flex items-center gap-3">
+          <i class="fa-solid fa-certificate text-emerald-600 dark:text-emerald-400 text-xl"></i>
+          <div>
+            <p class="text-xs font-bold text-emerald-900 dark:text-emerald-200">Ahorro Ambiental Certificado</p>
+            <p class="text-[11px] text-emerald-700 dark:text-emerald-400">Evita ${res.co2Saved} frente a la adquisición de maquinaria nueva.</p>
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="flex items-center gap-2">
+          <button onclick="triggerReserveModal('${res.id}')" class="flex-1 bg-teal-600 hover:bg-teal-700 text-white font-bold py-2.5 px-4 rounded-xl text-xs transition shadow-lg shadow-teal-600/20 text-center">
+            Reserva Eco-Flash (${res.rate})
+          </button>
+          <button class="bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200 p-2.5 rounded-xl text-xs hover:bg-slate-200 transition" title="Compartir ficha">
+            <i class="fa-solid fa-share-nodes"></i>
+          </button>
+        </div>
+      `;
+
+      drawer.classList.remove('translate-y-full', 'sm:opacity-0', 'sm:pointer-events-none');
+    }
+
+    function closeResourceDrawer() {
+      const drawer = document.getElementById('resource-drawer');
+      drawer.classList.add('translate-y-full', 'sm:opacity-0', 'sm:pointer-events-none');
+    }
+
+    function triggerReserveModal(id) {
+      alertCustomModal(`¡Reserva iniciada para ${id}! Se ha generado la petición con pasaporte digital de uso y verificación IoT.`);
+    }
+
+    function alertCustomModal(msg) {
+      const toast = document.createElement('div');
+      toast.className = 'fixed top-20 right-4 z-50 bg-slate-900 text-white px-4 py-3 rounded-xl shadow-2xl border border-teal-500 text-xs flex items-center gap-3 max-w-sm animate-bounce';
+      toast.innerHTML = `
+        <i class="fa-solid fa-circle-check text-emerald-400 text-lg"></i>
+        <span>${msg}</span>
+      `;
+      document.body.appendChild(toast);
+      setTimeout(() => toast.remove(), 4000);
+    }
+
+    // Filter Sector Logic
+    document.querySelectorAll('.sector-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        document.querySelectorAll('.sector-btn').forEach(b => {
+          b.classList.remove('active', 'bg-teal-50', 'dark:bg-teal-950/60', 'border-2', 'border-teal-500', 'text-teal-800', 'dark:text-teal-200');
+          b.classList.add('bg-slate-50', 'dark:bg-slate-700/50', 'border-slate-200', 'dark:border-slate-600');
+        });
+
+        const target = e.currentTarget;
+        target.classList.add('active', 'bg-teal-50', 'dark:bg-teal-950/60', 'border-2', 'border-teal-500', 'text-teal-800', 'dark:text-teal-200');
+
+        const sector = target.dataset.sector;
+        activeFilterSector = sector;
+
+        const filtered = sector === 'all' 
+          ? ecosystemResources 
+          : ecosystemResources.filter(r => r.sector === sector);
+
+        renderMapMarkers(filtered);
+        renderSidebarCards(filtered);
+      });
+    });
+
+    // Distance Slider Logic
+    document.getElementById('distance-range').addEventListener('input', (e) => {
+      document.getElementById('distance-value').innerText = `${e.target.value} km`;
+    });
+
+    // GDPR Accept
+    document.getElementById('accept-gdpr').addEventListener('click', () => {
+      document.getElementById('gdpr-banner').style.display = 'none';
+    });
+
+    // High Contrast Toggle
+    document.getElementById('toggle-contrast').addEventListener('click', () => {
+      document.documentElement.classList.toggle('dark');
+    });
+
+    // Font Resizing Logic for Accessibility
+    let currentFontSize = 100;
+    document.getElementById('font-increase').addEventListener('click', () => {
+      if (currentFontSize < 130) {
+        currentFontSize += 5;
+        document.documentElement.style.fontSize = `${currentFontSize}%`;
+      }
+    });
+    document.getElementById('font-decrease').addEventListener('click', () => {
+      if (currentFontSize > 90) {
+        currentFontSize -= 5;
+        document.documentElement.style.fontSize = `${currentFontSize}%`;
+      }
+    });
+
+    function setupAccessibilityEvents() {
+      document.getElementById('recenter-map').addEventListener('click', () => {
+        map.setView([39.470, -0.370], 13);
+      });
+    }
+  </script>
+</body>
+</html>
